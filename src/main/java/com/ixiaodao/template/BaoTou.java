@@ -31,12 +31,12 @@ import java.util.concurrent.Executors;
  */
 public class BaoTou {
     private static final JFrame jFrame = new JFrame("登录");
-    private static final JLabel jLabel3 = new JLabel("1006");
+    private static final JLabel jLabel3 = new JLabel("1010");
     private static final JLabel jLabel = new JLabel("0");
     private static final JButton clearButton = new JButton("清零");
 
-    //private static final JLabel jLabel2 = new JLabel("延时");
-    //private static final JTextField DELAY = new JTextField("500");
+    private static final JLabel jLabel2 = new JLabel("延时");
+    private static final JTextField DELAY = new JTextField("50", 5);
 
     private static final ExecutorService executorService = Executors.newFixedThreadPool(1);
 
@@ -47,6 +47,7 @@ public class BaoTou {
     private static boolean flag = false;
 
     private static int count = 0;
+    private static int delay = 50;
 
     private static final NativeKeyListener nativeKeyListener = new NativeKeyListener() {
         @Override
@@ -68,7 +69,7 @@ public class BaoTou {
                         robot.delay(3);
                         robot.keyRelease(KeyEvent.VK_E);
 
-                        robot.delay(41);  // 打开商店延迟
+                        robot.delay(delay);  // 打开商店延迟
 
                         robot.mousePress(KeyEvent.BUTTON1_MASK);
 
@@ -139,20 +140,19 @@ public class BaoTou {
         panel.add(jLabel3);
         panel.add(jLabel);
         panel.add(clearButton);
-        //panel.add(jLabel2);
-        //panel.add(DELAY);
-        //
-        //DELAY.addFocusListener(new FocusListener() {
-        //    @Override
-        //    public void focusGained(FocusEvent e) {
-        //
-        //    }
-        //
-        //    @Override
-        //    public void focusLost(FocusEvent e) {
-        //
-        //    }
-        //});
+        panel.add(jLabel2);
+        panel.add(DELAY);
+
+        DELAY.addFocusListener(new FocusListener() {
+            @Override
+            public void focusGained(FocusEvent e) {
+            }
+
+            @Override
+            public void focusLost(FocusEvent e) {
+                delay = Integer.parseInt(DELAY.getText());
+            }
+        });
 
         clearButton.addActionListener(e->{
             count = 0;
