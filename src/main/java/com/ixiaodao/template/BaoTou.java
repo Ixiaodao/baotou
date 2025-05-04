@@ -36,7 +36,7 @@ public class BaoTou {
 
     private static final Robot robot;
 
-    private static final BufferedImage read;
+    private static BufferedImage read;
 
     private static boolean flag = false;
 
@@ -52,6 +52,7 @@ public class BaoTou {
             if (nativeEvent.getKeyCode() == 66) {
                 executorService.submit(() -> {
                     flag = true;
+
                     while (flag) {
                         robot.mousePress(KeyEvent.BUTTON1_MASK);
                         robot.delay(8);
@@ -61,7 +62,9 @@ public class BaoTou {
                         robot.keyPress(KeyEvent.VK_E);
                         robot.delay(3);
                         robot.keyRelease(KeyEvent.VK_E);
-                        robot.delay(50);
+
+                        robot.delay(50);  // 打开商店延迟
+
                         robot.mouseMove(33, 33);
                         robot.delay(1);
 
@@ -92,6 +95,7 @@ public class BaoTou {
                         robot.mousePress(KeyEvent.BUTTON1_MASK);
                         robot.delay(930);
                         robot.mouseRelease(KeyEvent.BUTTON1_MASK);
+
                         robot.delay(1);
                         CoordBean coordBean = FindImgUtils.searchImg(0, 540, 106, 100, read, 31);
                         if (coordBean != null) {
@@ -109,7 +113,18 @@ public class BaoTou {
     static {
         try {
             robot = new Robot();
-            read = ImageIO.read(new File("爆头.png"));
+
+            File file = new File("爆头.png");
+            if (file.exists()) {
+                read = ImageIO.read(file);
+            }
+            file = new File("D:\\爆头.png");
+            if (file.exists()) {
+                read = ImageIO.read(file);
+            }
+            if (read == null) {
+                throw new RuntimeException("111111111111111111");
+            }
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
