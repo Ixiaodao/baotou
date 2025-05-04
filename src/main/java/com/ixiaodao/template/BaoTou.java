@@ -12,6 +12,8 @@ import com.ixiaodao.search.image.utils.ToolsUtils;
 import javax.imageio.ImageIO;
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.FocusEvent;
+import java.awt.event.FocusListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.WindowEvent;
 import java.awt.event.WindowListener;
@@ -29,8 +31,12 @@ import java.util.concurrent.Executors;
  */
 public class BaoTou {
     private static final JFrame jFrame = new JFrame("登录");
+    private static final JLabel jLabel3 = new JLabel("1006");
     private static final JLabel jLabel = new JLabel("0");
     private static final JButton clearButton = new JButton("清零");
+
+    //private static final JLabel jLabel2 = new JLabel("延时");
+    //private static final JTextField DELAY = new JTextField("500");
 
     private static final ExecutorService executorService = Executors.newFixedThreadPool(1);
 
@@ -52,7 +58,6 @@ public class BaoTou {
             if (nativeEvent.getKeyCode() == 66) {
                 executorService.submit(() -> {
                     flag = true;
-
                     while (flag) {
                         robot.mousePress(KeyEvent.BUTTON1_MASK);
                         robot.delay(8);
@@ -63,13 +68,9 @@ public class BaoTou {
                         robot.delay(3);
                         robot.keyRelease(KeyEvent.VK_E);
 
-                        robot.delay(50);  // 打开商店延迟
-
-                        robot.mouseMove(33, 33);
-                        robot.delay(1);
+                        robot.delay(41);  // 打开商店延迟
 
                         robot.mousePress(KeyEvent.BUTTON1_MASK);
-                        robot.delay(31);
 
                         robot.keyPress(KeyEvent.VK_3);
                         robot.delay(10);
@@ -135,8 +136,23 @@ public class BaoTou {
         jFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
         JPanel panel = new JPanel(new FlowLayout(FlowLayout.LEFT,20,20));  //水平和竖直间隙
+        panel.add(jLabel3);
         panel.add(jLabel);
         panel.add(clearButton);
+        //panel.add(jLabel2);
+        //panel.add(DELAY);
+        //
+        //DELAY.addFocusListener(new FocusListener() {
+        //    @Override
+        //    public void focusGained(FocusEvent e) {
+        //
+        //    }
+        //
+        //    @Override
+        //    public void focusLost(FocusEvent e) {
+        //
+        //    }
+        //});
 
         clearButton.addActionListener(e->{
             count = 0;
