@@ -31,9 +31,10 @@ import java.util.concurrent.Executors;
  */
 public class BaoTou {
     private static final JFrame jFrame = new JFrame("登录");
-    private static final JLabel jLabel3 = new JLabel("1010-H");
+    private static final JLabel jLabel3 = new JLabel("1010-H------爆头个数：");
     private static final JLabel jLabel = new JLabel("0");
     private static final JButton clearButton = new JButton("清零");
+    private static final JCheckBox CHECK_BOX = new JCheckBox("神行");
 
     private static final JLabel jLabel2 = new JLabel("延时");
     private static final JTextField DELAY = new JTextField("50", 5);
@@ -49,6 +50,14 @@ public class BaoTou {
     private static int count = 0;
     private static int delay = 50;
 
+    private static final int left = KeyEvent.BUTTON1_MASK;
+    private static final int S = KeyEvent.VK_S;
+    private static final int E = KeyEvent.VK_E;
+    private static final int W = KeyEvent.VK_W;
+    private static final int _1 = KeyEvent.VK_1;
+    private static final int _3 = KeyEvent.VK_3;
+
+
     private static final NativeKeyListener nativeKeyListener = new NativeKeyListener() {
         @Override
         public void nativeKeyPressed(NativeKeyEvent nativeEvent) {
@@ -59,54 +68,97 @@ public class BaoTou {
             if (nativeEvent.getKeyCode() == 66) {
                 executorService.submit(() -> {
                     flag = true;
+                    boolean selected = CHECK_BOX.isSelected();
                     while (flag) {
-                        robot.mousePress(KeyEvent.BUTTON1_MASK);
-                        robot.delay(8);
-                        robot.mouseRelease(KeyEvent.BUTTON1_MASK);
-                        robot.delay(11);
+                        if (selected) {
+                            robot.mousePress(left);
+                            robot.delay(50);
+                            robot.mouseRelease(left);
 
-                        robot.keyPress(KeyEvent.VK_E);
-                        robot.delay(3);
-                        robot.keyRelease(KeyEvent.VK_E);
+                            robot.keyPress(S);
+                            robot.delay(55);
+                            robot.keyRelease(S);
 
-                        robot.delay(delay);  // 打开商店延迟
+                            robot.keyPress(E);
 
-                        robot.mousePress(KeyEvent.BUTTON1_MASK);
+                            robot.delay(delay);
 
-                        robot.keyPress(KeyEvent.VK_3);
-                        robot.delay(10);
-                        robot.keyPress(KeyEvent.VK_E);
-                        robot.delay(9);
-                        robot.mouseRelease(KeyEvent.BUTTON1_MASK);
-                        robot.delay(1);
+                            robot.keyPress(_3);
+                            robot.delay(30);
+                            robot.keyRelease(_3);
 
-                        robot.keyRelease(KeyEvent.VK_3);
-                        robot.delay(10);
-                        robot.keyRelease(KeyEvent.VK_E);
-                        robot.delay(10);
+                            robot.keyRelease(E);
 
-                        robot.delay(15);
+                            robot.keyPress(E);
+                            robot.delay(30);
+                            robot.keyRelease(E);
 
-                        robot.mousePress(KeyEvent.BUTTON1_MASK);
-                        robot.delay(25);
-                        robot.mouseRelease(KeyEvent.BUTTON1_MASK);
-                        robot.delay(1);
 
-                        robot.delay(15);
+                            robot.keyPress(W);
+                            robot.delay(58);
+                            robot.keyRelease(W);
+                            robot.delay(1);
 
-                        robot.mousePress(KeyEvent.BUTTON1_MASK);
-                        robot.delay(930);
-                        robot.mouseRelease(KeyEvent.BUTTON1_MASK);
+                            robot.delay(1);
+
+                            robot.mousePress(left);
+                            robot.keyPress(KeyEvent.VK_SHIFT);
+                            robot.delay(11);
+                            for (int i = 0; i < 4; i++) {
+                                robot.keyPress(KeyEvent.VK_W);
+                                robot.delay(55);
+                                robot.keyRelease(KeyEvent.VK_W);
+                                robot.delay(1);
+
+                                robot.keyPress(KeyEvent.VK_S);
+                                robot.delay(55);
+                                robot.keyRelease(KeyEvent.VK_S);
+                                robot.delay(1);
+
+                                robot.keyPress(KeyEvent.VK_W);
+                                robot.delay(55);
+                                robot.keyRelease(KeyEvent.VK_W);
+                                robot.delay(1);
+
+                                robot.keyPress(KeyEvent.VK_S);
+                                robot.delay(55);
+                                robot.keyRelease(KeyEvent.VK_S);
+                                robot.delay(1);
+                            }
+                            robot.keyRelease(KeyEvent.VK_SHIFT);
+                            robot.delay(1);
+                            robot.keyRelease(left);
+                        } else {
+                            robot.mousePress(KeyEvent.BUTTON1_MASK);
+                            robot.keyPress(KeyEvent.VK_E);
+                            robot.delay(30);
+                            robot.keyRelease(KeyEvent.VK_E);
+
+                            robot.mouseRelease(KeyEvent.BUTTON1_MASK);
+
+                            robot.delay(delay);  // 打开商店延迟
+
+                            robot.mousePress(KeyEvent.BUTTON1_MASK);
+
+                            robot.keyPress(KeyEvent.VK_3);
+                            robot.delay(30);
+                            robot.keyPress(KeyEvent.VK_E);
+                            robot.delay(30);
+                            robot.mouseRelease(KeyEvent.BUTTON1_MASK);
+                            robot.delay(30);
+
+                            robot.keyRelease(KeyEvent.VK_3);
+                            robot.delay(30);
+                            robot.keyRelease(KeyEvent.VK_E);
+                            robot.delay(30);
+
+                            robot.mousePress(KeyEvent.BUTTON1_MASK);
+                            robot.delay(770);
+                            robot.mouseRelease(KeyEvent.BUTTON1_MASK);
+                        }
 
                         robot.delay(1);
                         CoordBean coordBean = FindImgUtils.searchImg(14, 540, 70, 65, read, 31);
-                        //CoordBean coordBean = FindImgUtils.searchImg(14, 466, 70, 65, read, 31);
-                        //try {
-                        //    ImageIO.write(robot.createScreenCapture(new Rectangle(14, 466, 70, 65)), "PNG",
-                        //            new File("D:\\learn\\baotou\\tmp\\" + System.currentTimeMillis() + ".png"));
-                        //} catch (IOException e) {
-                        //    throw new RuntimeException(e);
-                        //}
                         if (coordBean != null) {
                             ToolsUtils.beep();
                             count++;
@@ -147,8 +199,10 @@ public class BaoTou {
         panel.add(jLabel3);
         panel.add(jLabel);
         panel.add(clearButton);
+        panel.add(CHECK_BOX);
         panel.add(jLabel2);
         panel.add(DELAY);
+
 
         DELAY.addFocusListener(new FocusListener() {
             @Override
