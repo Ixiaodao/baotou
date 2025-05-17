@@ -31,7 +31,7 @@ import java.util.concurrent.Executors;
  */
 public class BaoTou {
     private static final JFrame jFrame = new JFrame("登录");
-    private static final JLabel jLabel3 = new JLabel("1010");
+    private static final JLabel jLabel3 = new JLabel("1010-H");
     private static final JLabel jLabel = new JLabel("0");
     private static final JButton clearButton = new JButton("清零");
 
@@ -42,7 +42,7 @@ public class BaoTou {
 
     private static final Robot robot;
 
-    private static BufferedImage read;
+    public static BufferedImage read;
 
     private static boolean flag = false;
 
@@ -99,7 +99,14 @@ public class BaoTou {
                         robot.mouseRelease(KeyEvent.BUTTON1_MASK);
 
                         robot.delay(1);
-                        CoordBean coordBean = FindImgUtils.searchImg(0, 540, 106, 100, read, 31);
+                        CoordBean coordBean = FindImgUtils.searchImg(14, 540, 70, 65, read, 31);
+                        //CoordBean coordBean = FindImgUtils.searchImg(14, 466, 70, 65, read, 31);
+                        //try {
+                        //    ImageIO.write(robot.createScreenCapture(new Rectangle(14, 466, 70, 65)), "PNG",
+                        //            new File("D:\\learn\\baotou\\tmp\\" + System.currentTimeMillis() + ".png"));
+                        //} catch (IOException e) {
+                        //    throw new RuntimeException(e);
+                        //}
                         if (coordBean != null) {
                             ToolsUtils.beep();
                             count++;
@@ -120,7 +127,7 @@ public class BaoTou {
             if (file.exists()) {
                 read = ImageIO.read(file);
             }
-            file = new File("D:\\爆头.png");
+            file = new File("D:\\nzhan\\爆头.png");
             if (file.exists()) {
                 read = ImageIO.read(file);
             }
