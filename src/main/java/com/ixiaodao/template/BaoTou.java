@@ -8,6 +8,7 @@ import com.github.kwhat.jnativehook.keyboard.NativeKeyListener;
 import com.ixiaodao.search.image.model.CoordBean;
 import com.ixiaodao.search.image.utils.FindImgUtils;
 import com.ixiaodao.search.image.utils.ToolsUtils;
+import org.apache.commons.io.FileUtils;
 
 import javax.imageio.ImageIO;
 import javax.swing.*;
@@ -19,8 +20,8 @@ import java.awt.event.WindowEvent;
 import java.awt.event.WindowListener;
 import java.awt.image.BufferedImage;
 import java.io.File;
-import java.net.URL;
-import java.security.ProtectionDomain;
+import java.net.URLDecoder;
+import java.nio.charset.StandardCharsets;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
@@ -31,8 +32,8 @@ import java.util.concurrent.Executors;
  */
 public class BaoTou {
     private static final JFrame jFrame = new JFrame("登录");
-    private static final JLabel jLabel3 = new JLabel("1010-H------爆头个数：");
-    private static final JLabel jLabel = new JLabel("0");
+    private static final JLabel versionLabel = new JLabel("1010-H------爆头个数：");
+    private static final JLabel countLabel = new JLabel("0");
     private static final JButton clearButton = new JButton("清零");
     private static final JCheckBox CHECK_BOX = new JCheckBox("神行");
 
@@ -56,7 +57,10 @@ public class BaoTou {
     private static final int W = KeyEvent.VK_W;
     private static final int _1 = KeyEvent.VK_1;
     private static final int _3 = KeyEvent.VK_3;
-
+    private static final int x;
+    private static final int y;
+    private static final int width;
+    private static final int height;
 
     private static final NativeKeyListener nativeKeyListener = new NativeKeyListener() {
         @Override
@@ -158,11 +162,11 @@ public class BaoTou {
                         }
 
                         robot.delay(1);
-                        CoordBean coordBean = FindImgUtils.searchImg(14, 540, 70, 65, read, 31);
+                        CoordBean coordBean = FindImgUtils.searchImg(x, y, width, height, read, 31);
                         if (coordBean != null) {
                             ToolsUtils.beep();
                             count++;
-                            jLabel.setText(String.valueOf(count));
+                            countLabel.setText(String.valueOf(count));
                             break;
                         }
                     }
@@ -175,16 +179,32 @@ public class BaoTou {
         try {
             robot = new Robot();
 
-            File file = new File("爆头.png");
+            String path = BaoTou.class.getProtectionDomain()
+                    .getCodeSource()
+                    .getLocation()
+                    .getPath();
+            path = URLDecoder.decode(path, StandardCharsets.UTF_8.name());
+            String jarDir = new File(path).getParent();
+            System.out.println("jarDir=" + jarDir);
+            String s = FileUtils.readFileToString(new File(jarDir + File.separator + "config.txt"), StandardCharsets.UTF_8);
+            String[] split = s.split("\r\n");
+            String start = split[0];
+            String end = split[1];
+            start = start.replace("，", ",").replace(" ", "").replace("\r", "").replace("\n", "");
+            end = end.replace("，", ",").replace(" ", "").replace("\r", "").replace("\n", "");
+            String[] startArr = start.split(",");
+            String[] endArr = end.split(",");
+
+            x = Integer.parseInt(startArr[0]);
+            y = Integer.parseInt(startArr[1]);
+            width = Integer.parseInt(endArr[0]) - Integer.parseInt(startArr[0]);
+            height = Integer.parseInt(endArr[1]) - Integer.parseInt(startArr[1]);
+            System.out.println(String.format("x1=%s,y1=%s,width=%s,height=%s", x, y, width, height));
+            File file = new File(jarDir + File.separator + "爆头.png");
             if (file.exists()) {
                 read = ImageIO.read(file);
-            }
-            file = new File("D:\\nzhan\\爆头.png");
-            if (file.exists()) {
-                read = ImageIO.read(file);
-            }
-            if (read == null) {
-                throw new RuntimeException("111111111111111111");
+            } else {
+                throw new RuntimeException("爆头图片没找到");
             }
         } catch (Exception e) {
             throw new RuntimeException(e);
@@ -195,9 +215,9 @@ public class BaoTou {
         jFrame.setBounds(100, 670, 560, 320);
         jFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
-        JPanel panel = new JPanel(new FlowLayout(FlowLayout.LEFT,20,20));  //水平和竖直间隙
-        panel.add(jLabel3);
-        panel.add(jLabel);
+        JPanel panel = new JPanel(new FlowLayout(FlowLayout.LEFT,20,20));
+        panel.add(versionLabel);
+        panel.add(countLabel);
         panel.add(clearButton);
         panel.add(CHECK_BOX);
         panel.add(jLabel2);
@@ -217,7 +237,7 @@ public class BaoTou {
 
         clearButton.addActionListener(e->{
             count = 0;
-            jLabel.setText("0");
+            countLabel.setText("0");
         });
 
 
