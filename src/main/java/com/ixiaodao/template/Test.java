@@ -16,7 +16,7 @@ public class Test {
     public static void main(String[] args) {
         while (true) {
             long l1 = System.currentTimeMillis();
-            CoordBean coordBean = FindImgUtils.searchImg(0, 540, 106, 100, BaoTou.read, 31);
+            CoordBean coordBean = FindImgUtils.searchImg(0, 540, 106, 100, BaoTou.read1, 31);
             long l2 = System.currentTimeMillis();
             System.out.println(l2 - l1);
             ToolsUtils.sleep(100);

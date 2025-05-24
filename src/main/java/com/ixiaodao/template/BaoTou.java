@@ -79,7 +79,7 @@ public class BaoTou {
                     while (flag) {
                         if (selected) {
                             robot.keyPress(KeyEvent.VK_S);
-                            robot.delay(55);
+                            robot.delay(54);
                             robot.keyRelease(KeyEvent.VK_S);
 
                             robot.mousePress(KeyEvent.BUTTON1_MASK);
@@ -100,7 +100,7 @@ public class BaoTou {
                             robot.delay(30);
 
                             robot.keyPress(KeyEvent.VK_W);
-                            robot.delay(55);
+                            robot.delay(57);
                             robot.keyRelease(KeyEvent.VK_W);
 
                             robot.keyRelease(KeyEvent.VK_3);
