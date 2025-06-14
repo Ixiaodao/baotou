@@ -46,7 +46,7 @@ public class BaoTou {
     private static final Robot robot;
 
     public static BufferedImage read1; // 窗口
-    public static BufferedImage read2; // 全屏
+    public static BufferedImage sdImg; // 窗口
 
     private static boolean flag = false;
 
@@ -64,6 +64,11 @@ public class BaoTou {
     private static final int width;
     private static final int height;
 
+    private static final int sdWidth;
+    private static final int sdHeight;
+    private static final int sdX;
+    private static final int sdY;
+
     private static final NativeKeyListener nativeKeyListener = new NativeKeyListener() {
         @Override
         public void nativeKeyPressed(NativeKeyEvent nativeEvent) {
@@ -75,7 +80,7 @@ public class BaoTou {
                 executorService.submit(() -> {
                     flag = true;
                     boolean selected = CHECK_BOX.isSelected();
-                    BufferedImage read = quanPing.isSelected() ? read2 : read1;
+                    BufferedImage read = read1;
                     while (flag) {
                         if (selected) {
                             robot.keyPress(KeyEvent.VK_S);
@@ -88,7 +93,15 @@ public class BaoTou {
                             robot.keyRelease(KeyEvent.VK_E);
                             robot.mouseRelease(KeyEvent.BUTTON1_MASK);
 
-                            robot.delay(delay);  // 打开商店延迟
+                            robot.delay(2);
+
+                            for (int i = 0; i < 100; i++) {
+                                CoordBean coordBean = FindImgUtils.searchImg(sdX, sdY, sdWidth, sdHeight, sdImg, 31);
+                                if (coordBean != null) {
+                                    break;
+                                }
+                                ToolsUtils.sleep(1);
+                            }
 
                             robot.mousePress(KeyEvent.BUTTON1_MASK);
 
@@ -99,14 +112,14 @@ public class BaoTou {
                             robot.mouseRelease(KeyEvent.BUTTON1_MASK);
                             robot.delay(30);
 
-                            robot.keyPress(KeyEvent.VK_W);
-                            robot.delay(57);
-                            robot.keyRelease(KeyEvent.VK_W);
-
                             robot.keyRelease(KeyEvent.VK_3);
                             robot.delay(30);
                             robot.keyRelease(KeyEvent.VK_E);
                             robot.delay(30);
+
+                            robot.keyPress(KeyEvent.VK_W);
+                            robot.delay(57);
+                            robot.keyRelease(KeyEvent.VK_W);
 
                             robot.mousePress(KeyEvent.BUTTON1_MASK);
                             robot.keyPress(KeyEvent.VK_SHIFT);
@@ -154,7 +167,15 @@ public class BaoTou {
 
                             robot.mouseRelease(KeyEvent.BUTTON1_MASK);
 
-                            robot.delay(delay);  // 打开商店延迟
+                            robot.delay(2);
+
+                            for (int i = 0; i < 100; i++) {
+                                CoordBean coordBean = FindImgUtils.searchImg(sdX, sdY, sdWidth, sdHeight, sdImg, 31);
+                                if (coordBean != null) {
+                                    break;
+                                }
+                                ToolsUtils.sleep(1);
+                            }
 
                             robot.mousePress(KeyEvent.BUTTON1_MASK);
 
@@ -202,25 +223,34 @@ public class BaoTou {
             System.out.println("jarDir=" + jarDir);
             String s = FileUtils.readFileToString(new File(jarDir + File.separator + "config.txt"), StandardCharsets.UTF_8);
             String[] split = s.split("\r\n");
-            String start = split[0];
-            String end = split[1];
-            start = start.replace("，", ",").replace(" ", "").replace("\r", "").replace("\n", "");
-            end = end.replace("，", ",").replace(" ", "").replace("\r", "").replace("\n", "");
-            String[] startArr = start.split(",");
-            String[] endArr = end.split(",");
+            String[] btArr = split[0].split("#");
+            String[] btStart = btArr[0].split(",");
+            String[] btEnd = btArr[1].split(",");
 
-            x = Integer.parseInt(startArr[0]);
-            y = Integer.parseInt(startArr[1]);
-            width = Integer.parseInt(endArr[0]) - Integer.parseInt(startArr[0]);
-            height = Integer.parseInt(endArr[1]) - Integer.parseInt(startArr[1]);
+            x = Integer.parseInt(btStart[0]);
+            y = Integer.parseInt(btStart[1]);
+            width = Integer.parseInt(btEnd[0]) - x;
+            height = Integer.parseInt(btEnd[1]) - y;
+
+
+            String[] sdArr = split[1].split("#");
+            String[] sdStart = sdArr[0].split(",");
+            String[] sdEnd = sdArr[1].split(",");
+
+            sdX = Integer.parseInt(sdStart[0]);
+            sdY = Integer.parseInt(sdStart[1]);
+            sdWidth = Integer.parseInt(sdEnd[0]) - sdX;
+            sdHeight = Integer.parseInt(sdEnd[1]) - sdY;
+
+
             System.out.println(String.format("x1=%s,y1=%s,width=%s,height=%s", x, y, width, height));
             File file1 = new File(jarDir + File.separator + "爆头.png");
-            File file2 = new File(jarDir + File.separator + "爆头-全屏.png");
-            if (!file1.exists() || !file2.exists()) {
+            File sd = new File(jarDir + File.separator + "sd.png");
+            if (!file1.exists() || !sd.exists()) {
                 throw new RuntimeException("爆头图片没找到");
             }
             read1 = ImageIO.read(file1);
-            read2 = ImageIO.read(file2);
+            sdImg = ImageIO.read(sd);
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
