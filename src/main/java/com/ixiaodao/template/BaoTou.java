@@ -1,6 +1,7 @@
 package com.ixiaodao.template;
 
 
+import com.alibaba.fastjson.JSON;
 import com.github.kwhat.jnativehook.GlobalScreen;
 import com.github.kwhat.jnativehook.NativeHookException;
 import com.github.kwhat.jnativehook.keyboard.NativeKeyEvent;
@@ -22,6 +23,7 @@ import java.awt.image.BufferedImage;
 import java.io.File;
 import java.net.URLDecoder;
 import java.nio.charset.StandardCharsets;
+import java.util.LinkedHashMap;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
@@ -32,20 +34,19 @@ import java.util.concurrent.Executors;
  */
 public class BaoTou {
     private static final JFrame jFrame = new JFrame("登录");
-    private static final JLabel versionLabel = new JLabel("1010-H------爆头个数：");
+    private static final JLabel versionLabel = new JLabel("1010 爆头个数：");
     private static final JLabel countLabel = new JLabel("0");
     private static final JButton clearButton = new JButton("清零");
     private static final JCheckBox CHECK_BOX = new JCheckBox("神行");
-    private static final JCheckBox quanPing = new JCheckBox("全屏");
 
-    private static final JLabel jLabel2 = new JLabel("延时");
+    private static final JLabel delayLabel = new JLabel("延时");
     private static final JTextField DELAY = new JTextField("50", 5);
 
     private static final ExecutorService executorService = Executors.newFixedThreadPool(1);
 
     private static final Robot robot;
 
-    public static BufferedImage read1; // 窗口
+    public static BufferedImage btImg; // 窗口
     public static BufferedImage sdImg; // 窗口
 
     private static boolean flag = false;
@@ -69,6 +70,11 @@ public class BaoTou {
     private static final int sdX;
     private static final int sdY;
 
+    private static final int wDelay;
+    private static final int sDelay;
+    private static final int eDelay;
+
+
     private static final NativeKeyListener nativeKeyListener = new NativeKeyListener() {
         @Override
         public void nativeKeyPressed(NativeKeyEvent nativeEvent) {
@@ -80,22 +86,16 @@ public class BaoTou {
                 executorService.submit(() -> {
                     flag = true;
                     boolean selected = CHECK_BOX.isSelected();
-                    BufferedImage read = read1;
+                    BufferedImage read = btImg;
                     while (flag) {
                         if (selected) {
-                            robot.keyPress(KeyEvent.VK_S);
-                            robot.delay(54);
-                            robot.keyRelease(KeyEvent.VK_S);
-
-                            robot.mousePress(KeyEvent.BUTTON1_MASK);
                             robot.keyPress(KeyEvent.VK_E);
-                            robot.delay(30);
+                            robot.delay(11);
                             robot.keyRelease(KeyEvent.VK_E);
-                            robot.mouseRelease(KeyEvent.BUTTON1_MASK);
 
-                            robot.delay(2);
+                            robot.delay(eDelay);
 
-                            for (int i = 0; i < 100; i++) {
+                            for (int i = 0; i < 200; i++) {
                                 CoordBean coordBean = FindImgUtils.searchImg(sdX, sdY, sdWidth, sdHeight, sdImg, 31);
                                 if (coordBean != null) {
                                     break;
@@ -103,73 +103,40 @@ public class BaoTou {
                                 ToolsUtils.sleep(1);
                             }
 
-                            robot.mousePress(KeyEvent.BUTTON1_MASK);
-
                             robot.keyPress(KeyEvent.VK_3);
-                            robot.delay(30);
+                            robot.delay(11);
                             robot.keyPress(KeyEvent.VK_E);
-                            robot.delay(30);
-                            robot.mouseRelease(KeyEvent.BUTTON1_MASK);
-                            robot.delay(30);
+                            robot.delay(11);
+
+                            robot.mousePress(KeyEvent.BUTTON1_MASK);
 
                             robot.keyRelease(KeyEvent.VK_3);
-                            robot.delay(30);
+                            robot.delay(11);
                             robot.keyRelease(KeyEvent.VK_E);
-                            robot.delay(30);
+                            robot.delay(11);
 
-                            robot.keyPress(KeyEvent.VK_W);
-                            robot.delay(57);
-                            robot.keyRelease(KeyEvent.VK_W);
+                            for (int i = 0; i < 4; i++) {
+                                robot.keyPress(W);
+                                robot.delay(wDelay);
+                                robot.keyRelease(W);
+                                robot.delay(wDelay);
 
-                            robot.mousePress(KeyEvent.BUTTON1_MASK);
-                            robot.keyPress(KeyEvent.VK_SHIFT);
-
-                            for (int i = 0; i < 3; i++) {
-                                robot.keyPress(KeyEvent.VK_W);
-                                robot.delay(55);
-                                robot.keyRelease(KeyEvent.VK_W);
-                                robot.delay(1);
-
-                                robot.keyPress(KeyEvent.VK_S);
-                                robot.delay(55);
-                                robot.keyRelease(KeyEvent.VK_S);
-                                robot.delay(1);
-
-                                robot.keyPress(KeyEvent.VK_W);
-                                robot.delay(55);
-                                robot.keyRelease(KeyEvent.VK_W);
-                                robot.delay(1);
-
-                                robot.keyPress(KeyEvent.VK_S);
-                                robot.delay(55);
-                                robot.keyRelease(KeyEvent.VK_S);
-                                robot.delay(1);
+                                robot.keyPress(S);
+                                robot.delay(sDelay);
+                                robot.keyRelease(S);
+                                robot.delay(sDelay);
                             }
 
-                            robot.keyPress(KeyEvent.VK_W);
-                            robot.delay(55);
-                            robot.keyRelease(KeyEvent.VK_W);
-                            robot.delay(1);
 
-                            robot.keyPress(KeyEvent.VK_S);
-                            robot.delay(55);
-                            robot.keyRelease(KeyEvent.VK_S);
-                            robot.delay(1);
-
-                            robot.keyRelease(KeyEvent.VK_SHIFT);
-                            robot.delay(10);
-                            robot.keyRelease(left);
+                            robot.mouseRelease(KeyEvent.BUTTON1_MASK);
                         } else {
-                            robot.mousePress(KeyEvent.BUTTON1_MASK);
                             robot.keyPress(KeyEvent.VK_E);
-                            robot.delay(30);
+                            robot.delay(11);
                             robot.keyRelease(KeyEvent.VK_E);
 
-                            robot.mouseRelease(KeyEvent.BUTTON1_MASK);
+                            robot.delay(eDelay);
 
-                            robot.delay(2);
-
-                            for (int i = 0; i < 100; i++) {
+                            for (int i = 0; i < 200; i++) {
                                 CoordBean coordBean = FindImgUtils.searchImg(sdX, sdY, sdWidth, sdHeight, sdImg, 31);
                                 if (coordBean != null) {
                                     break;
@@ -177,22 +144,19 @@ public class BaoTou {
                                 ToolsUtils.sleep(1);
                             }
 
-                            robot.mousePress(KeyEvent.BUTTON1_MASK);
-
                             robot.keyPress(KeyEvent.VK_3);
-                            robot.delay(30);
+                            robot.delay(11);
                             robot.keyPress(KeyEvent.VK_E);
-                            robot.delay(30);
-                            robot.mouseRelease(KeyEvent.BUTTON1_MASK);
-                            robot.delay(30);
+                            robot.delay(11);
+
+                            robot.mousePress(KeyEvent.BUTTON1_MASK);
 
                             robot.keyRelease(KeyEvent.VK_3);
-                            robot.delay(30);
+                            robot.delay(11);
                             robot.keyRelease(KeyEvent.VK_E);
-                            robot.delay(30);
+                            robot.delay(11);
 
-                            robot.mousePress(KeyEvent.BUTTON1_MASK);
-                            robot.delay(770);
+                            robot.delay(945);
                             robot.mouseRelease(KeyEvent.BUTTON1_MASK);
                         }
 
@@ -222,35 +186,39 @@ public class BaoTou {
             String jarDir = new File(path).getParent();
             System.out.println("jarDir=" + jarDir);
             String s = FileUtils.readFileToString(new File(jarDir + File.separator + "config.txt"), StandardCharsets.UTF_8);
-            String[] split = s.split("\r\n");
-            String[] btArr = split[0].split("#");
-            String[] btStart = btArr[0].split(",");
-            String[] btEnd = btArr[1].split(",");
 
-            x = Integer.parseInt(btStart[0]);
-            y = Integer.parseInt(btStart[1]);
-            width = Integer.parseInt(btEnd[0]) - x;
-            height = Integer.parseInt(btEnd[1]) - y;
+            LinkedHashMap<String, String> map = JSON.parseObject(s, LinkedHashMap.class);
+            String btStart = map.get("btStart");
+            String btEnd = map.get("btEnd");
+            String sdStart = map.get("sdStart");
+            String sdEnd = map.get("sdEnd");
 
+            String[] btStartArr = btStart.replace("，", "").split(",");
+            String[] btEndArr = btEnd.replace("，", "").split(",");
 
-            String[] sdArr = split[1].split("#");
-            String[] sdStart = sdArr[0].split(",");
-            String[] sdEnd = sdArr[1].split(",");
+            x = Integer.parseInt(btStartArr[0]);
+            y = Integer.parseInt(btStartArr[1]);
+            width = Integer.parseInt(btEndArr[0]) - x;
+            height = Integer.parseInt(btEndArr[1]) - y;
 
-            sdX = Integer.parseInt(sdStart[0]);
-            sdY = Integer.parseInt(sdStart[1]);
-            sdWidth = Integer.parseInt(sdEnd[0]) - sdX;
-            sdHeight = Integer.parseInt(sdEnd[1]) - sdY;
+            String[] sdStartArr = sdStart.replace("，", "").split(",");
+            String[] sdEndArr = sdEnd.replace("，", "").split(",");
+            sdX = Integer.parseInt(sdStartArr[0]);
+            sdY = Integer.parseInt(sdStartArr[1]);
+            sdWidth = Integer.parseInt(sdEndArr[0]) - sdX;
+            sdHeight = Integer.parseInt(sdEndArr[1]) - sdY;
 
+            wDelay = Integer.parseInt(map.get("wDelay"));
+            sDelay = Integer.parseInt(map.get("sDelay"));
+            eDelay = Integer.parseInt(map.get("eDelay"));
 
-            System.out.println(String.format("x1=%s,y1=%s,width=%s,height=%s", x, y, width, height));
-            File file1 = new File(jarDir + File.separator + "爆头.png");
-            File sd = new File(jarDir + File.separator + "sd.png");
-            if (!file1.exists() || !sd.exists()) {
-                throw new RuntimeException("爆头图片没找到");
+            File btFile = new File(jarDir + File.separator + "爆头.png");
+            File sdFile = new File(jarDir + File.separator + "sd.png");
+            if (!btFile.exists() || !sdFile.exists()) {
+                throw new RuntimeException("图片没找到");
             }
-            read1 = ImageIO.read(file1);
-            sdImg = ImageIO.read(sd);
+            btImg = ImageIO.read(btFile);
+            sdImg = ImageIO.read(sdFile);
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
@@ -260,15 +228,13 @@ public class BaoTou {
         jFrame.setBounds(100, 670, 560, 320);
         jFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
-        JPanel panel = new JPanel(new FlowLayout(FlowLayout.LEFT,20,20));
+        JPanel panel = new JPanel(new FlowLayout(FlowLayout.LEFT, 20, 20));
         panel.add(versionLabel);
         panel.add(countLabel);
         panel.add(clearButton);
         panel.add(CHECK_BOX);
-        panel.add(quanPing);
-        panel.add(jLabel2);
+        panel.add(delayLabel);
         panel.add(DELAY);
-
 
         DELAY.addFocusListener(new FocusListener() {
             @Override
@@ -281,11 +247,10 @@ public class BaoTou {
             }
         });
 
-        clearButton.addActionListener(e->{
+        clearButton.addActionListener(e -> {
             count = 0;
             countLabel.setText("0");
         });
-
 
         jFrame.setContentPane(panel);
         jFrame.setVisible(true);
@@ -329,4 +294,5 @@ public class BaoTou {
         init();
         GlobalScreen.registerNativeHook();
     }
+
 }
