@@ -74,15 +74,22 @@ public class BaoTou {
     private static final int sDelay;
     private static final int eDelay;
 
+    private static final boolean find;
 
     private static final NativeKeyListener nativeKeyListener = new NativeKeyListener() {
         @Override
         public void nativeKeyPressed(NativeKeyEvent nativeEvent) {
             if (nativeEvent.getKeyCode() == 65) {
                 flag = false;
+                if (!flag) {
+                    return;
+                }
                 return;
             }
             if (nativeEvent.getKeyCode() == 66) {
+                if (flag) {
+                    return;
+                }
                 executorService.submit(() -> {
                     flag = true;
                     boolean selected = CHECK_BOX.isSelected();
@@ -90,30 +97,34 @@ public class BaoTou {
                     while (flag) {
                         if (selected) {
                             robot.keyPress(KeyEvent.VK_E);
-                            robot.delay(11);
+                            robot.delay(25);
                             robot.keyRelease(KeyEvent.VK_E);
 
-                            robot.delay(eDelay);
+                            if (find) {
+                                robot.delay(eDelay);
 
-                            for (int i = 0; i < 200; i++) {
-                                CoordBean coordBean = FindImgUtils.searchImg(sdX, sdY, sdWidth, sdHeight, sdImg, 31);
-                                if (coordBean != null) {
-                                    break;
+                                for (int i = 0; i < 200; i++) {
+                                    CoordBean coordBean = FindImgUtils.searchImg(sdX, sdY, sdWidth, sdHeight, sdImg, 31);
+                                    if (coordBean != null) {
+                                        break;
+                                    }
+                                    ToolsUtils.sleep(1);
                                 }
-                                ToolsUtils.sleep(1);
+                            } else {
+                                robot.delay(eDelay);
                             }
 
                             robot.keyPress(KeyEvent.VK_3);
-                            robot.delay(11);
+                            robot.delay(22);
                             robot.keyPress(KeyEvent.VK_E);
-                            robot.delay(11);
+                            robot.delay(22);
 
                             robot.mousePress(KeyEvent.BUTTON1_MASK);
 
                             robot.keyRelease(KeyEvent.VK_3);
-                            robot.delay(11);
+                            robot.delay(22);
                             robot.keyRelease(KeyEvent.VK_E);
-                            robot.delay(11);
+                            robot.delay(22);
 
                             for (int i = 0; i < 4; i++) {
                                 robot.keyPress(W);
@@ -134,14 +145,18 @@ public class BaoTou {
                             robot.delay(11);
                             robot.keyRelease(KeyEvent.VK_E);
 
-                            robot.delay(eDelay);
+                            if (find) {
+                                robot.delay(eDelay);
 
-                            for (int i = 0; i < 200; i++) {
-                                CoordBean coordBean = FindImgUtils.searchImg(sdX, sdY, sdWidth, sdHeight, sdImg, 31);
-                                if (coordBean != null) {
-                                    break;
+                                for (int i = 0; i < 200; i++) {
+                                    CoordBean coordBean = FindImgUtils.searchImg(sdX, sdY, sdWidth, sdHeight, sdImg, 31);
+                                    if (coordBean != null) {
+                                        break;
+                                    }
+                                    ToolsUtils.sleep(1);
                                 }
-                                ToolsUtils.sleep(1);
+                            } else {
+                                robot.delay(eDelay);
                             }
 
                             robot.keyPress(KeyEvent.VK_3);
@@ -186,12 +201,14 @@ public class BaoTou {
             String jarDir = new File(path).getParent();
             System.out.println("jarDir=" + jarDir);
             String s = FileUtils.readFileToString(new File(jarDir + File.separator + "config.txt"), StandardCharsets.UTF_8);
+            s = s.replaceAll("//.*", "");
 
             LinkedHashMap<String, String> map = JSON.parseObject(s, LinkedHashMap.class);
             String btStart = map.get("btStart");
             String btEnd = map.get("btEnd");
             String sdStart = map.get("sdStart");
             String sdEnd = map.get("sdEnd");
+            find = Boolean.parseBoolean(map.get("视图"));
 
             String[] btStartArr = btStart.replace("，", "").split(",");
             String[] btEndArr = btEnd.replace("，", "").split(",");
