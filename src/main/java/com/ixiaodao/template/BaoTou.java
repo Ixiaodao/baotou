@@ -81,9 +81,6 @@ public class BaoTou {
         public void nativeKeyPressed(NativeKeyEvent nativeEvent) {
             if (nativeEvent.getKeyCode() == 65) {
                 flag = false;
-                if (!flag) {
-                    return;
-                }
                 return;
             }
             if (nativeEvent.getKeyCode() == 66) {
