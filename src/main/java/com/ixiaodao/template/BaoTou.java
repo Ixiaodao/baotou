@@ -94,13 +94,13 @@ public class BaoTou {
                     while (flag) {
                         if (selected) {
                             robot.keyPress(KeyEvent.VK_E);
-                            robot.delay(25);
+                            ToolsUtils.sleep(25);
                             robot.keyRelease(KeyEvent.VK_E);
 
                             if (find) {
-                                robot.delay(eDelay);
+                                ToolsUtils.sleep(eDelay);
 
-                                for (int i = 0; i < 200; i++) {
+                                for (int i = 0; i < 100; i++) {
                                     CoordBean coordBean = FindImgUtils.searchImg(sdX, sdY, sdWidth, sdHeight, sdImg, 31);
                                     if (coordBean != null) {
                                         break;
@@ -108,44 +108,44 @@ public class BaoTou {
                                     ToolsUtils.sleep(1);
                                 }
                             } else {
-                                robot.delay(eDelay);
+                                ToolsUtils.sleep(eDelay);
                             }
 
                             robot.keyPress(KeyEvent.VK_3);
-                            robot.delay(22);
+                            ToolsUtils.sleep(22);
                             robot.keyPress(KeyEvent.VK_E);
-                            robot.delay(22);
+                            ToolsUtils.sleep(22);
 
                             robot.mousePress(KeyEvent.BUTTON1_MASK);
 
                             robot.keyRelease(KeyEvent.VK_3);
-                            robot.delay(22);
+                            ToolsUtils.sleep(22);
                             robot.keyRelease(KeyEvent.VK_E);
-                            robot.delay(22);
+                            ToolsUtils.sleep(22);
 
                             for (int i = 0; i < 4; i++) {
                                 robot.keyPress(W);
-                                robot.delay(wDelay);
+                                ToolsUtils.sleep(wDelay);
                                 robot.keyRelease(W);
-                                robot.delay(wDelay);
+                                ToolsUtils.sleep(wDelay);
 
                                 robot.keyPress(S);
-                                robot.delay(sDelay);
+                                ToolsUtils.sleep(sDelay);
                                 robot.keyRelease(S);
-                                robot.delay(sDelay);
+                                ToolsUtils.sleep(sDelay);
                             }
 
 
                             robot.mouseRelease(KeyEvent.BUTTON1_MASK);
                         } else {
                             robot.keyPress(KeyEvent.VK_E);
-                            robot.delay(11);
+                            ToolsUtils.sleep(11);
                             robot.keyRelease(KeyEvent.VK_E);
 
                             if (find) {
-                                robot.delay(eDelay);
+                                ToolsUtils.sleep(eDelay);
 
-                                for (int i = 0; i < 200; i++) {
+                                for (int i = 0; i < 100; i++) {
                                     CoordBean coordBean = FindImgUtils.searchImg(sdX, sdY, sdWidth, sdHeight, sdImg, 31);
                                     if (coordBean != null) {
                                         break;
@@ -153,26 +153,26 @@ public class BaoTou {
                                     ToolsUtils.sleep(1);
                                 }
                             } else {
-                                robot.delay(eDelay);
+                                ToolsUtils.sleep(eDelay);
                             }
 
                             robot.keyPress(KeyEvent.VK_3);
-                            robot.delay(11);
+                            ToolsUtils.sleep(11);
                             robot.keyPress(KeyEvent.VK_E);
-                            robot.delay(11);
+                            ToolsUtils.sleep(11);
 
                             robot.mousePress(KeyEvent.BUTTON1_MASK);
 
                             robot.keyRelease(KeyEvent.VK_3);
-                            robot.delay(11);
+                            ToolsUtils.sleep(11);
                             robot.keyRelease(KeyEvent.VK_E);
-                            robot.delay(11);
+                            ToolsUtils.sleep(11);
 
-                            robot.delay(945);
+                            ToolsUtils.sleep(945);
                             robot.mouseRelease(KeyEvent.BUTTON1_MASK);
                         }
 
-                        robot.delay(1);
+                        ToolsUtils.sleep(1);
                         CoordBean coordBean = FindImgUtils.searchImg(x, y, width, height, read, 31);
                         if (coordBean != null) {
                             ToolsUtils.beep();
@@ -205,7 +205,7 @@ public class BaoTou {
             String btEnd = map.get("btEnd");
             String sdStart = map.get("sdStart");
             String sdEnd = map.get("sdEnd");
-            find = Boolean.parseBoolean(map.get("视图"));
+            find = "是".equals(map.get("识图"));
 
             String[] btStartArr = btStart.replace("，", "").split(",");
             String[] btEndArr = btEnd.replace("，", "").split(",");
