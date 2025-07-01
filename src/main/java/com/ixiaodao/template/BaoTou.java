@@ -25,7 +25,9 @@ import java.net.URLDecoder;
 import java.nio.charset.StandardCharsets;
 import java.util.LinkedHashMap;
 import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
+import java.util.concurrent.LinkedBlockingQueue;
+import java.util.concurrent.ThreadPoolExecutor;
+import java.util.concurrent.TimeUnit;
 
 /**
  * 1
@@ -42,7 +44,8 @@ public class BaoTou {
     private static final JLabel delayLabel = new JLabel("延时");
     private static final JTextField DELAY = new JTextField("50", 5);
 
-    private static final ExecutorService executorService = Executors.newFixedThreadPool(1);
+    private static final ExecutorService executorService = new ThreadPoolExecutor(1, 1, 60,
+            TimeUnit.SECONDS, new LinkedBlockingQueue<>(1), new ThreadPoolExecutor.AbortPolicy());
 
     private static final Robot robot;
 
@@ -79,18 +82,17 @@ public class BaoTou {
     private static final NativeKeyListener nativeKeyListener = new NativeKeyListener() {
         @Override
         public void nativeKeyPressed(NativeKeyEvent nativeEvent) {
-            if (nativeEvent.getKeyCode() == 65) {
+            if (nativeEvent.getKeyCode() == 56) {
                 flag = false;
                 return;
             }
-            if (nativeEvent.getKeyCode() == 66) {
+            if (nativeEvent.getKeyCode() == 3675) {
                 if (flag) {
                     return;
                 }
                 executorService.submit(() -> {
                     flag = true;
                     boolean selected = CHECK_BOX.isSelected();
-                    BufferedImage read = btImg;
                     while (flag) {
                         if (selected) {
                             robot.keyPress(KeyEvent.VK_E);
@@ -139,12 +141,11 @@ public class BaoTou {
                             robot.mouseRelease(KeyEvent.BUTTON1_MASK);
                         } else {
                             robot.keyPress(KeyEvent.VK_E);
-                            ToolsUtils.sleep(11);
+                            ToolsUtils.sleep(22);
                             robot.keyRelease(KeyEvent.VK_E);
 
                             if (find) {
                                 ToolsUtils.sleep(eDelay);
-
                                 for (int i = 0; i < 100; i++) {
                                     CoordBean coordBean = FindImgUtils.searchImg(sdX, sdY, sdWidth, sdHeight, sdImg, 31);
                                     if (coordBean != null) {
@@ -157,24 +158,25 @@ public class BaoTou {
                             }
 
                             robot.keyPress(KeyEvent.VK_3);
-                            ToolsUtils.sleep(11);
+                            ToolsUtils.sleep(22);
                             robot.keyPress(KeyEvent.VK_E);
-                            ToolsUtils.sleep(11);
+                            ToolsUtils.sleep(22);
 
                             robot.mousePress(KeyEvent.BUTTON1_MASK);
 
                             robot.keyRelease(KeyEvent.VK_3);
-                            ToolsUtils.sleep(11);
+                            ToolsUtils.sleep(22);
                             robot.keyRelease(KeyEvent.VK_E);
-                            ToolsUtils.sleep(11);
+                            ToolsUtils.sleep(22);
 
-                            ToolsUtils.sleep(945);
+                            ToolsUtils.sleep(890);
                             robot.mouseRelease(KeyEvent.BUTTON1_MASK);
                         }
 
                         ToolsUtils.sleep(1);
-                        CoordBean coordBean = FindImgUtils.searchImg(x, y, width, height, read, 31);
+                        CoordBean coordBean = FindImgUtils.searchImg(x, y, width, height, btImg, 31);
                         if (coordBean != null) {
+                            flag = false;
                             ToolsUtils.beep();
                             count++;
                             countLabel.setText(String.valueOf(count));
